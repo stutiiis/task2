@@ -1,0 +1,73 @@
+---
+title: "TASK"
+author: "Stuti Subramani"
+date: "2022-07-13"
+output:
+  word_document: default
+  html_document: default
+---
+
+## TASK1- PREDICTION USING SUPERVISED ML
+### Objective- To predict the marks obtained by the students based on the number of hours they study.
+Dataset: http://bit.ly/w-data
+
+#### IMPORTING REQUIRED LIBRARIES
+```{r}
+library(readr)
+library(ggplot2)
+```  
+
+#### IMPORTING AND READING THE DATA
+```{r}
+internship_data <- read_csv("https://raw.githubusercontent.com/AdiPersonalWorks/Random/master/student_scores%20-%20student_scores.csv")
+View(internship_data)
+```
+
+
+#### VISUALIZING THE DATA
+```{r}
+ggplot(internship_data) + geom_point(mapping= aes(x=Hours,y=Scores)) +labs(title ="Number of hours studied vs percentage of marks", caption= "There is a positive linear relation between the number of hours studied and percentage of marks obtained by a student.")
+```
+
+
+#### APPLYING LINEAR REGRESSION
+```{r}
+model= lm(internship_data$Scores~internship_data$Hours)
+summary(model)
+```
+
+
+#### PLOTTING A REGRESSION LINE
+
+```{r}
+ggplot(internship_data, aes(x=Hours,y=Scores)) + geom_point() +stat_smooth(method="lm",col="dodgerblue3") +labs(title= "Linear Model fitted tothe given data")
+```
+
+
+#### PREDICTING THE SCORES
+```{r}
+predicted_scores= predict(model,data.frame(internship_data$Hours))
+```
+
+
+#### COMPARING ACTUAL V/S PREDICTED
+```{r}
+data.frame(predicted_scores,internship_data$Scores)
+```
+
+
+#### WHAT WILL BE THE PREDICTED SCORE IF THE STUDENT STUDIES 9.25 HOURS A DAY?
+```{r}
+Hours=9.25
+Score= model$coefficients[1]+ model$coefficients[2]*Hours
+Score
+```
+According to the Regression model if the student studies for 9.25 hours a day then he/she is likely to score 92.9 marks.
+
+
+#### EVALUATING THE MODEL
+```{r}
+summary(model)$r.squared
+```
+##### The R square value is 0.95. Therefore, the model has worked well for our data.
+
